@@ -1,0 +1,392 @@
+@extends('layouts.master')
+@section('style')
+<style type="text/css">
+    .input{
+            height: 50%;
+            background-color: aqua;
+    }
+    th{
+        padding: 0px;
+        font-size: 12px;
+    }    
+    td{
+        padding: 0px;
+        font-size: 14px;
+    }
+    .bodyzoom{
+        zoom: 0.9;
+    }
+</style>
+
+<link rel="stylesheet" href="{{ url('https://cdn.datatables.net/1.10.18/css/dataTables.semanticui.min.css') }}" type="text/css" />
+{{-- <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" /> --}}
+<link rel="stylesheet" href="{{ asset('assets/css/daterangepicker.css')}}">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.5.6/css/buttons.dataTables.min.css" />
+
+@endsection
+@section('main')
+            <div class="col-lg-12 grid-margin">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <h3 style="color:black;margin-bottom: 0px;height: 0px;"  class="text-center" > รายงานการชั่งน้ำหนัก : {{ $order_number }}</h3>
+                            {{-- <div class="row">
+                                <div class="col-6" style="padding-top: 50px;">
+                                    <h4 class="text-center" style="color:blue;margin-bottom: 0px;height: 0px;">ชั่งเข้าเครื่องในขาว {{ $date_receive }}
+                                    </h4><br><br>
+                                    <table class="tbl table-hover " width="100%" border="1"  id="orderOffalWrecieve">
+                                        <thead class="text-center">
+                                            <tr style="background-color:#7dbeff">
+                                            <th style="padding: 0px;">No.</th>
+                                            <th style="padding: 0px;">จุดชั่ง</th>
+                                            <th style="padding: 0px;">Item code</th>
+                                            <th style="padding: 0px;">Item name</th>
+                                            <th style="padding: 0px;">นน.</th>
+                                            <th style="padding: 0px;">จำนวน</th>
+                                            <th style="padding: 0px;">เวลาชั่ง</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @php
+                                                $count=1;
+                                                $sum_weight=0;
+                                                $sum_unit=0;
+                                            @endphp
+                                            @if (!empty($select_in_W_send))
+                                                @foreach ($select_in_W_receive as $in_OFr)
+                                                <tr>
+                                                    <td class="text-center" style="padding: 0px;">{{ $count++ }}</td>
+                                                    <td class="text-center" style="padding: 0px;">{{ $in_OFr->scale_number }}</td>
+                                                    <td class="text-center" style="padding: 0px;">{{ $in_OFr->sku_code }}</td>
+                                                    <td class="text-center" style="padding: 0px;">{{ $in_OFr->item_name }}</td>
+                                                    <td class="text-center" style="padding: 0px;">{{ number_format($in_OFr->sku_weight, 2, '.', '') }}
+                                                        @php
+                                                            $sum_weight = $sum_weight +$in_OFr->sku_weight;
+                                                        @endphp
+                                                    </td>
+                                                    <td class="text-center" style="padding: 0px;">{{ $in_OFr->sku_amount }}
+                                                        @php
+                                                            $sum_unit = $sum_unit +$in_OFr->sku_amount;
+                                                        @endphp
+                                                        </td>
+                                                    <td class="text-center" style="padding: 0px;">{{ substr($in_OFr->weighing_date,11,8) }}</td>
+                                                </tr>
+                                                @endforeach
+                                            @endif
+                                        </tbody>
+                                        <tfoot>
+                                            <tr style="background-color:#ff8080">
+                                                <th class="text-center" style="padding: 0px;" colspan="4">รวม</th>
+                                                <th class="text-center" style="padding: 0px;">{{ $sum_weight }}</th>
+                                                <th class="text-center" style="padding: 0px;">{{ $sum_unit  }}</th>
+                                                <th class="text-center" style="padding: 0px;" ></td>
+    
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+
+                                <div class="col-6" style="padding-top: 50px;">
+                                    <h4 class="text-center" style="color:blue;margin-bottom: 0px;height: 0px;">ชั่งเข้าเครื่องในแดง {{ $date_receive }}</h4><br><br>
+                                    <table class="tbl table-hover " width="100%" border="1"  id="orderOffalRrecieve">
+                                        <thead class="text-center">
+                                            <tr style="background-color:#7dbeff">
+                                            <th style="padding: 0px;">No.</th>
+                                            <th style="padding: 0px;">จุดชั่ง</th>
+                                            <th style="padding: 0px;">Item code</th>
+                                            <th style="padding: 0px;">Item name</th>
+                                            <th style="padding: 0px;">นน.</th>
+                                            <th style="padding: 0px;">จำนวน</th>
+                                            <th style="padding: 0px;">เวลาชั่ง</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @php
+                                                $count=1;
+                                                $sum_weight=0;
+                                                $sum_unit=0;
+                                            @endphp
+                                            @if (!empty($select_in_R_send))
+                                                @foreach ($select_in_R_receive as $in_SHr)
+                                                <tr>
+                                                    <td class="text-center" style="padding: 0px;">{{ $count++ }}</td>
+                                                    <td class="text-center" style="padding: 0px;">{{ $in_SHr->scale_number }}</td>
+                                                    <td class="text-center" style="padding: 0px;">{{ $in_SHr->sku_code }}</td>
+                                                    <td class="text-center" style="padding: 0px;">{{ $in_SHr->item_name }}</td>
+                                                    <td class="text-center" style="padding: 0px;">{{ number_format($in_SHr->sku_weight, 2, '.', '') }}
+                                                        @php
+                                                            $sum_weight = $sum_weight + $in_SHr->sku_weight;
+                                                        @endphp
+                                                    </td>
+                                                    <td class="text-center" style="padding: 0px;">{{ $in_SHr->sku_amount }}
+                                                        @php
+
+                                                            $sum_unit = $sum_unit + ( $in_SHr->sku_amount == null ? 0 : $in_SHr->sku_amount );
+                                                        @endphp
+                                                        </td>
+                                                    <td class="text-center" style="padding: 0px;">{{ substr($in_SHr->weighing_date,11,8) }}</td>
+                                                </tr>
+                                                @endforeach
+                                            @endif
+                                        </tbody>
+                                        <tfoot>
+                                            <tr style="background-color:#ff8080">
+                                                <th class="text-center" style="padding: 0px;" colspan="4">รวม</th>
+                                                <th class="text-center" style="padding: 0px;">{{ $sum_weight }}</th>
+                                                <th class="text-center" style="padding: 0px;">{{ $sum_unit  }}</th>
+                                                <th class="text-center" style="padding: 0px;" ></td>
+    
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div> --}}
+                            
+                            <div class="row">
+                                <div class="col-6" style="padding-top: 50px;">
+                                    <h4 class="text-center" style="color:blue;margin-bottom: 0px;height: 0px;">ชั่งออกเครื่องในขาว {{ $date_receive }}
+                                    </h4><br><br>
+                                    <table class="tbl table-hover " width="100%" border="1"  id="orderOffalW">
+                                        <thead class="text-center">
+                                            <tr style="background-color:#7dbeff">
+                                            <th style="padding: 0px;">No.</th>
+                                            <th style="padding: 0px;">จุดชั่ง</th>
+                                            <th style="padding: 0px;">Item code</th>
+                                            <th style="padding: 0px;">Item name</th>
+                                            <th style="padding: 0px;">นน.</th>
+                                            <th style="padding: 0px;">จำนวน</th>
+                                            <th style="padding: 0px;">เวลาชั่ง</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @php
+                                                $count=1;
+                                                $sum_weight=0;
+                                                $sum_unit=0;
+                                            @endphp
+                                            @if (!empty($select_in_W_send))
+                                                @foreach ($select_in_W_send as $in_OF)
+                                                <tr>
+                                                    <td class="text-center" style="padding: 0px;">{{ $count++ }}</td>
+                                                    <td class="text-center" style="padding: 0px;">{{ $in_OF->scale_number }}</td>
+                                                    <td class="text-center" style="padding: 0px;">{{ $in_OF->sku_code }}</td>
+                                                    <td class="text-center" style="padding: 0px;">{{ $in_OF->item_name }}</td>
+                                                    <td class="text-center" style="padding: 0px;">{{ number_format($in_OF->sku_weight, 2, '.', '') }}
+                                                        @php
+                                                            $sum_weight = $sum_weight +$in_OF->sku_weight;
+                                                        @endphp
+                                                    </td>
+                                                    <td class="text-center" style="padding: 0px;">{{ $in_OF->sku_amount }}
+                                                        @php
+                                                            $sum_unit = $sum_unit +$in_OF->sku_amount;
+                                                        @endphp
+                                                        </td>
+                                                    <td class="text-center" style="padding: 0px;">{{ substr($in_OF->weighing_date,11,8) }}</td>
+                                                </tr>
+                                                @endforeach
+                                            @endif
+                                        </tbody>
+                                        <tfoot>
+                                            <tr style="background-color:#ff8080">
+                                                <th class="text-center" style="padding: 0px;"></th>
+                                                <th class="text-center" style="padding: 0px;"></th>
+                                                <th class="text-center" style="padding: 0px;"></th>
+                                                <th class="text-center" style="padding: 0px;">รวม</th>
+                                                <th class="text-center" style="padding: 0px;">{{ $sum_weight }}</th>
+                                                <th class="text-center" style="padding: 0px;">{{ $sum_unit  }}</th>
+                                                <th class="text-center" style="padding: 0px;" ></td>
+    
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+
+                                <div class="col-6" style="padding-top: 50px;">
+                                    <h4 class="text-center" style="color:blue;margin-bottom: 0px;height: 0px;">ชั่งออกเครื่องในแดง {{ $date_receive }}</h4><br><br>
+                                    <table class="tbl table-hover " width="100%" border="1"  id="orderOffalR">
+                                        <thead class="text-center">
+                                            <tr style="background-color:#7dbeff">
+                                            <th style="padding: 0px;">No.</th>
+                                            <th style="padding: 0px;">จุดชั่ง</th>
+                                            <th style="padding: 0px;">Item code</th>
+                                            <th style="padding: 0px;">Item name</th>
+                                            <th style="padding: 0px;">นน.</th>
+                                            <th style="padding: 0px;">จำนวน</th>
+                                            <th style="padding: 0px;">เวลาชั่ง</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @php
+                                                $count=1;
+                                                $sum_weight=0;
+                                                $sum_unit=0;
+                                            @endphp
+                                            @if (!empty($select_in_R_send))
+                                                @foreach ($select_in_R_send as $in_SH)
+                                                <tr>
+                                                    <td class="text-center" style="padding: 0px;">{{ $count++ }}</td>
+                                                    <td class="text-center" style="padding: 0px;">{{ $in_SH->scale_number }}</td>
+                                                    <td class="text-center" style="padding: 0px;">{{ $in_SH->sku_code }}</td>
+                                                    <td class="text-center" style="padding: 0px;">{{ $in_SH->item_name }}</td>
+                                                    <td class="text-center" style="padding: 0px;">{{ number_format($in_SH->sku_weight, 2, '.', '') }}
+                                                        @php
+                                                            $sum_weight = $sum_weight + $in_SH->sku_weight;
+                                                        @endphp
+                                                    </td>
+                                                    <td class="text-center" style="padding: 0px;">{{ $in_SH->sku_amount }}
+                                                        @php
+
+                                                            $sum_unit = $sum_unit + ( $in_SH->sku_amount == null ? 0 : $in_SH->sku_amount );
+                                                        @endphp
+                                                        </td>
+                                                    <td class="text-center" style="padding: 0px;">{{ substr($in_SH->weighing_date,11,8) }}</td>
+                                                </tr>
+                                                @endforeach
+                                            @endif
+                                        </tbody>
+                                        <tfoot>
+                                            <tr style="background-color:#ff8080">
+                                                <th class="text-center" style="padding: 0px;"></th>
+                                                <th class="text-center" style="padding: 0px;"></th>
+                                                <th class="text-center" style="padding: 0px;"></th>
+                                                <th class="text-center" style="padding: 0px;">รวม</th>
+                                                <th class="text-center" style="padding: 0px;">{{ $sum_weight }}</th>
+                                                <th class="text-center" style="padding: 0px;">{{ $sum_unit  }}</th>
+                                                <th class="text-center" style="padding: 0px;" ></td>
+    
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+@endsection
+
+@section('script')
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script src="{{ asset('https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js') }}"></script>
+<script src="{{ asset('https://cdn.datatables.net/buttons/1.5.6/js/buttons.flash.min.js') }}"></script>
+<script src="{{ asset('https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js') }}"></script>
+<script src="{{ asset('https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js') }}"></script>
+<script src="{{ asset('https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js') }}"></script>
+<script src="{{ asset('https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js') }}"></script>
+<script src="{{ asset('https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js') }}"></script>
+
+
+    <script>
+            var table1 = $('#orderOffalW').DataTable({
+                lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "All"]],
+                dom: 'Bfrtp',
+                buttons: [
+                    { extend: 'excelHtml5', footer: true },
+                //  'pdf', 'print'
+            ],
+            });
+            var table2 = $('#orderOffalR').DataTable({
+                lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "All"]],
+                dom: 'Bfrtp',
+                buttons: [
+                    { extend: 'excelHtml5', footer: true },
+                //  'pdf', 'print'
+            ],
+            });
+
+            
+            table1.on( 'order.dt search.dt', function () {
+                table1.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+                cell.innerHTML = i+1;
+            } );
+            } ).draw();
+
+            table2.on( 'order.dt search.dt', function () {
+                table2.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+                    cell.innerHTML = i+1;
+                } );
+            } ).draw();
+
+
+            var table3 = $('#orderOffalWrecieve').DataTable({
+                lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "All"]],
+                dom: 'Bfrtp',
+                buttons: [
+                    { extend: 'excelHtml5', footer: true },
+                //  'pdf', 'print'
+            ],
+            });
+            var table4 = $('#orderOffalRrecieve').DataTable({
+                lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "All"]],
+                dom: 'Bfrtp',
+                buttons: [
+                    { extend: 'excelHtml5', footer: true },
+                //  'pdf', 'print'
+            ],
+            });
+
+            table3.on( 'order.dt search.dt', function () {
+                table3.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+                cell.innerHTML = i+1;
+            } );
+            } ).draw();
+
+            table4.on( 'order.dt search.dt', function () {
+                table4.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+                    cell.innerHTML = i+1;
+                } );
+            } ).draw();
+
+            
+            
+            
+
+    </script>
+
+{{-- daterange --}}
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
+    <script>
+    $('#daterange').daterangepicker({
+        buttonClasses: ['btn', 'btn-sm'],
+        applyClass: 'btn-danger',
+        cancelClass: 'btn-inverse',
+        todayBtn: true,
+        language: 'th',
+        thaiyear: true,
+        locale: {
+            format: 'DD/MM/YYYY',
+            daysOfWeek : [
+                            "อา.",
+                            "จ.",
+                            "อ.",
+                            "พ.",
+                            "พฤ.",
+                            "ศ.",
+                            "ส."
+                        ],
+            monthNames : [
+                            "มกราคม",
+                            "กุมภาพันธ์",
+                            "มีนาคม",
+                            "เมษายน",
+                            "พฤษภาคม",
+                            "มิถุนายน",
+                            "กรกฎาคม",
+                            "สิงหาคม",
+                            "กันยายน",
+                            "ตุลาคม",
+                            "พฤศจิกายน",
+                            "ธันวาคม"
+                        ],
+            firstDay : 0
+        }
+    });
+    </script>
+
+
+@endsection
+
+
